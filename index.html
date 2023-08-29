@@ -4,12 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stopwatch with JS</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        body{   
+            background-color: rgb(255, 237, 216);
+        }
+
+        .stopwatch-container{
+            border-radius: 8px;
+            width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background-color: bisque;
+            font-size: 20px;
+        }
+
+        .unit{
+            border-radius: 8px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .time, .title, .all-btn{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        .time .unit{
+            background-color: rgb(255, 204, 141);
+        }
+
+        .btn{
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: brown;
+            border: 2px solid transparent;
+            color: white;
+        }
+
+        .btn:hover{
+            background-color: rgb(107, 27, 27);
+        }
+
+        .btn:disabled{
+            background-color: gray;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <div class="unit"></div>
-        <div class="unit"></div>
-        <div class="unit"></div>
+    <div class="stopwatch-container">
+        <div class="time">
+            <div class="unit" id="hours">0</div>
+            <div class="unit" id="minutes">0</div>
+            <div class="unit" id="seconds">0</div>
+        </div>
+        <div class="title">
+            <div class="unit" id="hours-title">hrs</div>
+            <div class="unit" id="minutes-title">min</div>
+            <div class="unit" id="seconds-title">sec</div>
+        </div>
+        <div class="all-btn">
+            <button class="btn" id="start-btn">start</button>
+            <button class="btn" id="stop-btn" disabled>stop</button>
+            <button class="btn" id="reset-btn" disabled>reset</button>
+        </div>
     </div>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const hours = document.getElementById('hours');
+        const minutes = document.getElementById('minutes');
+        const seconds = document.getElementById('seconds');
+        let intervalId;
+
+        const timeIncrement = () => {
+            let initialTime = parseInt(seconds.innerText) + parseInt(minutes.innerText)*60 + parseInt(hours.innerText)*3600;
+            initialTime++;
+            hours.innerText = parseInt(initialTime/3600);
+            initialTime = initialTime % 3600;
+            minutes.innerText = parseInt(initialTime/60);
+            initialTime = initialTime % 60;
+            seconds.innerText = initialTime;
+        }
+
+        const displayTime = (status) => {
+            
+        }
+        
+
+        startBtn.addEventListener('click', ()=>{
+            intervalId = setInterval(timeIncrement, 1000);
+            startBtn.setAttribute('disabled','true');
+            stopBtn.removeAttribute('disabled');
+            resetBtn.removeAttribute('disabled');
+        })
+
+        stopBtn.addEventListener('click', ()=>{
+            clearInterval(intervalId);
+            stopBtn.setAttribute('disabled','true');
+            startBtn.removeAttribute('disabled');
+            resetBtn.removeAttribute('disabled');
+        })
+
+        resetBtn.addEventListener('click', ()=>{ 
+            clearInterval(intervalId);
+            hours.innerText = 0;
+            minutes.innerText = 0;
+            seconds.innerText = 0;
+            startBtn.removeAttribute('disabled');
+            stopBtn.setAttribute('disabled','true');
+            resetBtn.setAttribute('disabled','true');
+        })
+    </script>
 </body>
 </html>
